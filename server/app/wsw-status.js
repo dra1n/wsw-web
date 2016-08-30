@@ -35,14 +35,14 @@ const wswServer = new machina.Fsm({
   },
 
   stop() {
-    this.handle('start')
+    this.handle('stop')
   },
 
   command(name) {
     wswClient.command(name, (data) => {
       this.emit('data', data.toString())
-    }, (result) => {
-      this.handle(result ? 'success' : 'error')
+    }, (hadError) => {
+      this.handle(hadError ? 'error' : 'success')
     })
   }
 })
