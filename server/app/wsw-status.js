@@ -10,11 +10,7 @@ const wswServer = new machina.Fsm({
   initialState: STOPPED,
   states: {
     [STARTING]: {
-      _onEnter() {
-        wswClient.command('wsw-start', (data) => {
-          this.trigger(data)
-        })
-      },
+      _onEnter() { this.command('wsw-start') },
       success: STARTED,
       error: STOPPED
     },
@@ -24,8 +20,9 @@ const wswServer = new machina.Fsm({
     },
 
     [STOPPING]: {
-      _onEnter() {
-      }
+      _onEnter() { this.command('wsw-stop') },
+      success: STOPPED,
+      error: STARTED
     },
 
     [STOPPED]: {
@@ -39,6 +36,14 @@ const wswServer = new machina.Fsm({
 
   stop() {
     this.handle('start')
+  },
+
+  command(name) {
+    wswClient.command(name, (data) => {
+      this.emit('data', data.toString())
+    }, (result) => {
+      this.handle(result ? 'success' : 'error')
+    })
   }
 })
 

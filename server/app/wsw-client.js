@@ -8,7 +8,7 @@ const client = {
   command(name, stdout, finished) {
     let socket = new net.Socket()
 
-    socket.on('data', (data) => stdout(data.toString()))
+    socket.on('data', stdout)
     socket.on('close', finished)
     socket.connect(port, host, () => socket.write(name))
   }
