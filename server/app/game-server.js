@@ -1,17 +1,17 @@
 const machina = require('machina')
-const wswClient = require('./wsw-client')
+const gameClient = require('./game-socket')
 
 const STOPPED = 'STOPPED'
 const STARTING = 'STARTING'
 const STARTED = 'STARTED'
 const STOPPING = 'STOPPING'
 
-const wswServer = new machina.Fsm({
+const gameServer = new machina.Fsm({
   initialState: STOPPED,
   states: {
     [STARTING]: {
       _onEnter() {
-        this.command('wsw-start')
+        this.command('game-start')
       },
       success: STARTED,
       error: STOPPED
@@ -23,7 +23,7 @@ const wswServer = new machina.Fsm({
 
     [STOPPING]: {
       _onEnter() {
-        this.command('wsw-stop')
+        this.command('game-stop')
       },
       success: STOPPED,
       error: STARTED
@@ -43,7 +43,7 @@ const wswServer = new machina.Fsm({
   },
 
   command(name) {
-    wswClient.command(name, (data) => {
+    gameClient.command(name, (data) => {
       this.emit('data', data.toString())
     }, (hadError) => {
       this.handle(hadError ? 'error' : 'success')
@@ -56,4 +56,4 @@ module.exports.STARTING = STARTING
 module.exports.STARTED = STARTED
 module.exports.STOPPING = STOPPING
 
-module.exports.wswServer = wswServer
+module.exports.gameServer = gameServer
