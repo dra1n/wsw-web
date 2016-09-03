@@ -1,3 +1,5 @@
+/* eslint no-console: 0 */
+
 const express = require('express')
 const path = require('path')
 const favicon = require('serve-favicon')
@@ -55,6 +57,5 @@ app.use(function (err, req, res) {
     error: {}
   })
 })
-
 
 module.exports = app
