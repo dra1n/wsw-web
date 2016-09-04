@@ -6,6 +6,8 @@ const favicon = require('serve-favicon')
 const logger = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
+const fs = require('fs')
+
 
 const routes = require('./routes/index')
 const rpc = require('./routes/rpc')
@@ -26,6 +28,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', routes)
 app.use('/', rpc)
+
+// asset pipeline for the poor
+app.get('/xterm/*', (req, res) => {
+  fs.createReadStream(__dirname + '/../node_modules/xterm/' + req.param(0)).pipe(res)
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

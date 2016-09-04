@@ -46,7 +46,8 @@ router.mount('*', 'send-command-protocol', (request) => {
       }
     }
   })
-  connection.on('close', (reasonCode, description) => {
+
+  connection.on('close', () => {
     console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.')
   })
 })

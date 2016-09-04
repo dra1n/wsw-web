@@ -3,6 +3,14 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src="/javascripts/app.js")
+    link(rel='stylesheet', href='/xterm/src/xterm.css')
+    link(rel='stylesheet', href='/xterm/addons/fullscreen/fullscreen.css')
   body
     block content
+
+    script(src='/xterm/src/xterm.js')
+    script(src='/xterm/addons/attach/attach.js')
+    script(src='/xterm/addons/fit/fit.js')
+    script(src='/xterm/addons/fullscreen/fullscreen.js')
+    script(src='/javascripts/game-console.js')
+    script(src='/javascripts/app.js')
