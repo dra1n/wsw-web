@@ -1,12 +1,14 @@
 /* eslint no-console: 0 */
 /* eslint default-case: 0 */
 
-const express = require('express')
-const router = express.Router()
+const router = require('express').Router()
+const expressWs = require('express-ws')
 const gameClient = require('../app/terminal-socket')
 
-require('express-ws')(router)
+expressWs(router)
 
-router.ws('/terminal', (ws) => gameClient.connect(ws))
+router.ws('/terminal', (ws) => {
+  gameClient.connect(ws)
+})
 
 module.exports = router

@@ -11,7 +11,7 @@ const client = {
 
     terminal.on('data', (data) => {
       try {
-        ws.send(data)
+        ws.send(data.toString())
       } catch (ex) {
         // The WebSocket is not open, ignore
       }
