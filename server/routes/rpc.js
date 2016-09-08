@@ -4,6 +4,13 @@ const gameClient = require('../app/game-socket')
 
 const cmd = (options) => JSON.stringify(options)
 
+router.get('/game', (req, res) => {
+  const commandOptions = Object.assign(req.query, { cmd: 'game' })
+  console.log(commandOptions)
+  gameClient.command(cmd(commandOptions))
+  res.send('ok')
+})
+
 router.get('/start', (req, res) => {
   gameClient.command(cmd({ cmd: 'start' }))
   res.send('ok')

@@ -1,53 +1,41 @@
-/* globals GameConsole */
+/* globals Terminal */
 
-/* eslint no-console: 0 */
 /* eslint no-underscore-dangle: 0 */
 
-const GameSocket = {
-  socket: null,
-
+const GameConsole = {
   init() {
-    const socket = new WebSocket('ws://' + window.location.host, 'send-command-protocol')
-
-    socket.onopen = () => {
-      console.log('Socket connected.')
-    }
-
-    socket.onclose = (event) => {
-      if (event.wasClean) {
-        console.log('Socket connection closed')
-      } else {
-        console.log('Socket connection interrupted')
-      }
-      console.log('Code: ' + event.code + ' reason: ' + event.reason)
-    }
-
-    socket.onmessage = (event) => {
-      const { term } = GameConsole
-      term.writeln(event.data.trim())
-    }
-
-    socket.onerror = (error) => {
-      console.log('Error ' + error.message)
-    }
-
     GameConsole.createTerminal(document.querySelector('.terminal'))
-    GameSocket.socket = socket
-
-    GameSocket.addCommandHandler('stats')
-    GameSocket.addCommandHandler('start')
-    GameSocket.addCommandHandler('stop')
   },
 
-  addCommandHandler(command) {
-    const { socket } = GameSocket
-    const { term } = GameConsole
+  runRealTerminal(socket, terminal) {
+    terminal.attach(socket)
+  },
 
-    GameConsole.addCommand(command, () => {
-      term.writeln('')
-      socket.send(command)
+  createTerminal(terminalContainer) {
+    while (terminalContainer.children.length) {
+      terminalContainer.removeChild(terminalContainer.children[0])
+    }
+
+    const terminal = new Terminal({
+      cursorBlink: true
+    })
+
+    const protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://'
+    const socketURL = protocol + location.hostname +
+      ((location.port) ? (':' + location.port) : '') + '/terminal'
+
+    terminal.open(terminalContainer)
+    terminal.fit()
+
+    const { cols, rows } = terminal.proposeGeometry()
+
+    fetch('/game?cols=' + cols + '&rows=' + rows + '&pty=true').then((res) => {
+      res.text().then(() => {
+        const socket = new WebSocket(socketURL)
+        socket.onopen = () => GameConsole.runRealTerminal(socket, terminal)
+      })
     })
   }
 }
 
-GameSocket.init()
+GameConsole.init()

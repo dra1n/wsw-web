@@ -5,6 +5,8 @@ const express = require('express')
 const router = express.Router()
 const gameClient = require('../app/terminal-socket')
 
+require('express-ws')(router)
+
 router.ws('/terminal', (ws) => gameClient.connect(ws))
 
 module.exports = router

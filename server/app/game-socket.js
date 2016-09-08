@@ -6,7 +6,7 @@ const port = process.env.WSW_SCRIPTS_RPC_PORT || 1337
 const host = process.env.WSW_SCRIPTS_HOST || '0.0.0.0'
 
 const client = {
-  command(name, stdout, finished) {
+  command(cmd, stdout, finished) {
     let socket = new net.Socket()
 
     if (stdout) {
@@ -17,7 +17,7 @@ const client = {
       socket.on('close', finished)
     }
 
-    socket.connect(port, host, () => socket.write(name))
+    socket.connect(port, host, () => socket.write(cmd))
 
     return socket
   }
