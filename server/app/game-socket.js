@@ -2,7 +2,7 @@
 /* eslint no-process-env: 0 */
 
 const net = require('net')
-const port = process.env.WSW_SCRIPTS_PORT || 1337
+const port = process.env.WSW_SCRIPTS_RPC_PORT || 1337
 const host = process.env.WSW_SCRIPTS_HOST || '0.0.0.0'
 
 const client = {

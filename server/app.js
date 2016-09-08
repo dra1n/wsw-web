@@ -11,6 +11,7 @@ const fs = require('fs')
 
 const routes = require('./routes/index')
 const rpc = require('./routes/rpc')
+const sock = require('./routes/socket')
 
 const app = express()
 
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', routes)
 app.use('/', rpc)
+app.use('/', sock)
 
 // asset pipeline for the poor
 app.get('/xterm/*', (req, res) => {
