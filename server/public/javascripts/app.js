@@ -1,7 +1,5 @@
 /* globals Terminal */
 
-/* eslint no-underscore-dangle: 0 */
-
 const GameConsole = {
   init() {
     GameConsole.createTerminal(document.querySelector('.terminal'))
