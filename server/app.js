@@ -8,7 +8,6 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const fs = require('fs')
 
-
 const routes = require('./routes/index')
 const rpc = require('./routes/rpc')
 const sock = require('./routes/socket')
@@ -65,6 +64,11 @@ app.use((err, req, res) => {
     message: err.message,
     error: {}
   })
+})
+
+// global exception handler
+process.on('uncaughtException', (err) => {
+  console.log(err)
 })
 
 module.exports = app
